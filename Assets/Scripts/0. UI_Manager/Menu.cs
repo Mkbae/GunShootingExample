@@ -46,10 +46,18 @@ public class Menu : MonoBehaviour
 	{
 		serverMenuHolder.SetActive(true);
 
-		NetworkManager.Instance.OnFindOtherUser += OnFindOtherUser;
-
 		if (NetworkManager.Instance != null)
+		{
+			NetworkManager.Instance.OnFindOtherUser += OnFindOtherUser;
+			NetworkManager.Instance.OnNotFindOtherUser += OnNotFindOtherUser;
 			NetworkManager.Instance.RefreshHostList();
+		}
+			
+	}
+
+	void OnNotFindOtherUser()
+	{
+		serverMenuHolder.SetActive(false);
 	}
 
 	void OnFindOtherUser()

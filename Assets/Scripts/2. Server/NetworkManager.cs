@@ -16,9 +16,9 @@ public class NetworkManager : MonoBehaviour
 	}
 
 	public System.Action OnFindOtherUser;
-	//public System.Action OnNotFindOtherUser;
+	public System.Action OnNotFindOtherUser;
 
-	//private float waitUserTime = 30;
+	private float waitUserTime = 15;
 
 
 	private const string typeName = "2345ajdfgnadfdafgih";
@@ -64,14 +64,31 @@ public class NetworkManager : MonoBehaviour
 	void OnServerInitialized()
 	{
 		Debug.Log("create host server.");
+
+		StartCoroutine("ConnectionCloseCoroutine");
+	}
+
+	private IEnumerator ConnectionCloseCoroutine()
+	{
+		float time = Time.time;
+
+		while (Time.time - time < waitUserTime)
+			yield return null;
+
+		Debug.Log("대기시간 초과");
+
+		Network.Disconnect();
+		OnNotFindOtherUser();
 	}
 
 	void OnConnectedToServer()
 	{
 		Debug.Log("join to host");
-
 		if (OnFindOtherUser != null)
-			OnFindOtherUser();
+		{
+            StopCoroutine("ConnectionCloseCoroutine");
+            OnFindOtherUser();
+		}
 	}
 
 	void OnPlayerConnected(NetworkPlayer player)
@@ -79,12 +96,20 @@ public class NetworkManager : MonoBehaviour
 		Debug.Log("Player" + player.ipAddress +": "+ player.port+" 에서 연결됨");
 
 		if (OnFindOtherUser != null)
-            OnFindOtherUser();
+        {
+            StopCoroutine("ConnectionCloseCoroutine");
+			OnFindOtherUser();
+		}
 	}
 
 	void OnFailedToConnect(NetworkConnectionError error)
 	{
 		Debug.Log("서버에 연결할 수 없습니다 : "+error);
+		if (OnNotFindOtherUser != null)
+		{
+            StopCoroutine("ConnectionCloseCoroutine");
+			OnNotFindOtherUser();
+		}
 	}
 
 	void OnMasterServerEvent(MasterServerEvent msEvent)
