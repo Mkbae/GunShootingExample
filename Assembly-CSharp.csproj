@@ -46,26 +46,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\AudioManager.cs" />
-     <Compile Include="Assets\Scripts\Crosshairs.cs" />
-     <Compile Include="Assets\Scripts\Enemy.cs" />
-     <Compile Include="Assets\Scripts\GameUI.cs" />
-     <Compile Include="Assets\Scripts\Gun.cs" />
-     <Compile Include="Assets\Scripts\GunController.cs" />
-     <Compile Include="Assets\Scripts\IDamagable.cs" />
-     <Compile Include="Assets\Scripts\LivingEntity.cs" />
-     <Compile Include="Assets\Scripts\MapGenerator.cs" />
-     <Compile Include="Assets\Scripts\Menu.cs" />
-     <Compile Include="Assets\Scripts\MusicManager.cs" />
-     <Compile Include="Assets\Scripts\MuzzleFlash.cs" />
-     <Compile Include="Assets\Scripts\Player.cs" />
-     <Compile Include="Assets\Scripts\PlayerController.cs" />
-     <Compile Include="Assets\Scripts\Projectile.cs" />
-     <Compile Include="Assets\Scripts\ScoreKeeper.cs" />
-     <Compile Include="Assets\Scripts\Shell.cs" />
-     <Compile Include="Assets\Scripts\SoundLibrary.cs" />
-     <Compile Include="Assets\Scripts\Spawner.cs" />
-     <Compile Include="Assets\Scripts\Utility.cs" />
+     <Compile Include="Assets\Scripts\0. UI_Manager\AudioManager.cs" />
+     <Compile Include="Assets\Scripts\0. UI_Manager\GameUI.cs" />
+     <Compile Include="Assets\Scripts\0. UI_Manager\Menu.cs" />
+     <Compile Include="Assets\Scripts\0. UI_Manager\MusicManager.cs" />
+     <Compile Include="Assets\Scripts\0. UI_Manager\ScoreKeeper.cs" />
+     <Compile Include="Assets\Scripts\0. UI_Manager\SoundLibrary.cs" />
+     <Compile Include="Assets\Scripts\0. UI_Manager\Utility.cs" />
+     <Compile Include="Assets\Scripts\1. Game\Crosshairs.cs" />
+     <Compile Include="Assets\Scripts\1. Game\Enemy.cs" />
+     <Compile Include="Assets\Scripts\1. Game\Gun.cs" />
+     <Compile Include="Assets\Scripts\1. Game\GunController.cs" />
+     <Compile Include="Assets\Scripts\1. Game\IDamagable.cs" />
+     <Compile Include="Assets\Scripts\1. Game\LivingEntity.cs" />
+     <Compile Include="Assets\Scripts\1. Game\MapGenerator.cs" />
+     <Compile Include="Assets\Scripts\1. Game\MuzzleFlash.cs" />
+     <Compile Include="Assets\Scripts\1. Game\Player.cs" />
+     <Compile Include="Assets\Scripts\1. Game\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\1. Game\Projectile.cs" />
+     <Compile Include="Assets\Scripts\1. Game\Shell.cs" />
+     <Compile Include="Assets\Scripts\1. Game\Spawner.cs" />
+     <Compile Include="Assets\Scripts\2. Server\NetworkManager.cs" />
      <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\NoiseEffectShaderRGB.shader" />

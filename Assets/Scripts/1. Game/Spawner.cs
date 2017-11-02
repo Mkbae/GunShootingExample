@@ -5,6 +5,9 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
 	public bool devMode;
+	public bool networkMode;
+
+	public GameObject NetworkPlayer;
 
 	public Wave[] waves;
 	public Enemy enemy;
@@ -28,10 +31,22 @@ public class Spawner : MonoBehaviour
 	private bool isCamping;
 
 	private bool isDisabled;
+	private bool isSetPlayer;
 
 	public event System.Action<int> OnNewWave;
 
 	private void Start()
+	{
+		if (networkMode)
+		{
+			Network.Instantiate(NetworkPlayer,Vector3.zero + Vector3.up * 3, Quaternion.identity,0);
+			return;
+		}
+
+		SetPlayer();
+	}
+
+	public void SetPlayer()
 	{
 		playerEntitiy = FindObjectOfType<Player>();
 		playerT = playerEntitiy.transform;
@@ -42,12 +57,16 @@ public class Spawner : MonoBehaviour
 		playerEntitiy.OnDeath += OnPlayerDeath;
 
 		map = FindObjectOfType<MapGenerator>();
-		NextWave ();
+        NextWave ();
+		isSetPlayer = true;
 	}
 
 	private void Update()
 	{
 		if (isDisabled)
+			return;
+
+		if (!isSetPlayer)
 			return;
 
 		if (Time.time > nextCampCheckTime)
@@ -104,9 +123,17 @@ public class Spawner : MonoBehaviour
 			yield return null;
 		}
 
-		Enemy spawnedEnemy = Instantiate(enemy, randomTile.position + Vector3.up, Quaternion.identity) as Enemy;
-		spawnedEnemy.OnDeath += OnEnemyDeath;
-		spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, currentWave.enemyHealth, currentWave.skinColor);
+		Enemy spawnedEnemy = null;
+		if (networkMode)
+			spawnedEnemy = Network.Instantiate(enemy, randomTile.position + Vector3.up, Quaternion.identity,0) as Enemy;
+		else
+			spawnedEnemy = Instantiate(enemy, randomTile.position + Vector3.up, Quaternion.identity) as Enemy;
+
+		if (spawnedEnemy != null)
+		{
+			spawnedEnemy.OnDeath += OnEnemyDeath;
+			spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, currentWave.enemyHealth, currentWave.skinColor);
+		}
 	}
 
 	private void OnPlayerDeath()

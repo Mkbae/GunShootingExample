@@ -1,17 +1,15 @@
 ﻿<Properties StartupConfiguration="{C025688C-DDB0-0B04-C7C1-4DAB448D811E}|단위 테스트">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MapGenerator.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/0. UI_Manager/ScoreKeeper.cs">
     <Files>
-      <File FileName="Assets/Scripts/ScoreKeeper.cs" Line="15" Column="3" />
-      <File FileName="Assets/Scripts/Enemy.cs" Line="80" Column="44" />
-      <File FileName="Assets/Scripts/GameUI.cs" Line="55" Column="64" />
-      <File FileName="Assets/Scripts/LivingEntity.cs" Line="9" Column="45" />
-      <File FileName="Assets/Scripts/AudioManager.cs" Line="98" Column="3" />
-      <File FileName="Assets/Scripts/Spawner.cs" Line="135" Column="56" />
-      <File FileName="Assets/Scripts/Player.cs" Line="95" Column="23" />
-      <File FileName="Assets/Scripts/MusicManager.cs" Line="34" Column="1" />
-      <File FileName="../../../Unity5/FunBrush/Assets/Scripts/0_Common/Managers/ResolutionController.cs" Line="141" Column="3" />
-      <File FileName="Assets/Scripts/Menu.cs" Line="97" Column="32" />
-      <File FileName="Assets/Scripts/MapGenerator.cs" Line="203" Column="45" />
+      <File FileName="Assets/Scripts/2. Server/NetworkManager.cs" Line="81" Column="31" />
+      <File FileName="Assets/Scripts/0. UI_Manager/Menu.cs" Line="52" Column="37" />
+      <File FileName="Assets/Scripts/0. UI_Manager/AudioManager.cs" Line="46" Column="39" />
+      <File FileName="Assets/Scripts/1. Game/Enemy.cs" Line="45" Column="4" />
+      <File FileName="Assets/Scripts/1. Game/Spawner.cs" Line="67" Column="1" />
+      <File FileName="Assets/Scripts/1. Game/Player.cs" Line="43" Column="42" />
+      <File FileName="Assets/Scripts/0. UI_Manager/GameUI.cs" Line="28" Column="23" />
+      <File FileName="Assets/Scripts/1. Game/PlayerController.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/0. UI_Manager/ScoreKeeper.cs" Line="19" Column="21" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

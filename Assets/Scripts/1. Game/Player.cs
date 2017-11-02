@@ -23,18 +23,28 @@ public class Player : LivingEntity
 	private PlayerController controller;
 	private GunController gunController;
 
+	Spawner spawner;
+	NetworkView networkView;
+
 	private void Awake()
 	{
 		controller = GetComponent<PlayerController>();
 		gunController = GetComponent<GunController>();
 		viewCamera = Camera.main;
-		FindObjectOfType<Spawner>().OnNewWave += OnNewWave;
+		spawner = FindObjectOfType<Spawner>();
+		spawner.OnNewWave += OnNewWave;
+		networkView = GetComponent<NetworkView>();
 	}
 
 	protected override void Start ()
 	{
 		base.Start ();
 
+		FindObjectOfType<GameUI>().SetPlayer();
+		FindObjectOfType<ScoreKeeper>().SetPlayer();
+
+		if (spawner.networkMode)
+			spawner.SetPlayer();
 	}
 
 	void OnNewWave(int waveNumber)
@@ -45,6 +55,14 @@ public class Player : LivingEntity
 
 	private void Update ()
 	{
+		if (spawner.networkMode)
+		{
+			if (networkView == null)
+				return;
+
+			if (!networkView.isMine)
+				return;
+		}
 		//Movement.
 		//input값. 키보드 방향키. GetAxisRaw -> not smoothing (키입력 해제시 바로 동작 정지)
 		Vector3 moveInput = new Vector3 (Input.GetAxisRaw ("Horizontal"), 0, Input.GetAxisRaw ("Vertical"));

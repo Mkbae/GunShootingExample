@@ -14,6 +14,10 @@ public class ScoreKeeper : MonoBehaviour
 		score = 0;
 
 		Enemy.OnDeathStatic += OnEnemyKilled;
+	}
+
+	public void SetPlayer()
+	{
 		Player.Instance.OnDeath += OnPlayerDeath;
 	}
 

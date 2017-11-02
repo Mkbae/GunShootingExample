@@ -8,6 +8,8 @@ public class Menu : MonoBehaviour
 {
 	public GameObject mainMenuHolder;
 	public GameObject optionsMenuHolder;
+	public GameObject serverMenuHolder;
+	public GameObject otherUser;
 
 	public Slider[] volumeSliders;
 	public Toggle[] resolutionToggles;
@@ -35,9 +37,33 @@ public class Menu : MonoBehaviour
 		fullScreenToggle.isOn = isFullScreen;
 	}
 
-	public void Play()
+	public void SinglePlay()
 	{
 		SceneManager.LoadScene(1);
+	}
+
+	public void MultiPlay()
+	{
+		serverMenuHolder.SetActive(true);
+
+		NetworkManager.Instance.OnFindOtherUser += OnFindOtherUser;
+
+		if (NetworkManager.Instance != null)
+			NetworkManager.Instance.RefreshHostList();
+	}
+
+	void OnFindOtherUser()
+	{
+		StartCoroutine(OnFindOtherUserCoroutine());
+	}
+
+	private IEnumerator OnFindOtherUserCoroutine()
+	{
+		otherUser.SetActive(true);
+
+		yield return new WaitForSeconds(2);
+
+		SceneManager.LoadScene(2);
 	}
 
 	public void Quit()

@@ -25,7 +25,7 @@ public class GameUI : MonoBehaviour
 		spawner.OnNewWave += OnNewWave;	
 	}
 
-	private void Start () {
+	public void SetPlayer () {
 		player = Player.Instance;
 		player.OnDeath += OnGameOver;
 	}
