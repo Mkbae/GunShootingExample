@@ -6,7 +6,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
 {
 	public float startingHealth;
 
-	protected float health;
+	public float health { get; protected set; }
 	protected bool isDead;
 
 	public event System.Action OnDeath;
@@ -16,12 +16,12 @@ public class LivingEntity : MonoBehaviour, IDamageable
 		health = startingHealth;
 	}
 
-	public void TakeHit(float damage,RaycastHit hit)
+	public virtual void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
 	{
 		TakeDamage (damage);
 	}
 
-	public void TakeDamage(float damage)
+	public virtual void TakeDamage(float damage)
 	{
 		health -= damage;
 
@@ -31,7 +31,8 @@ public class LivingEntity : MonoBehaviour, IDamageable
 		}
 	}
 
-	protected void Die()
+	[ContextMenu("Slef Destruct")]
+	public virtual void Die()
 	{
 		isDead = true;
 

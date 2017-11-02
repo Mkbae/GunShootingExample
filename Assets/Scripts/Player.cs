@@ -17,14 +17,30 @@ public class Player : LivingEntity
 
 	public float moveSpeed = 5;
 
+	public Crosshairs corsshairs;
+
+	private Camera viewCamera;
 	private PlayerController controller;
 	private GunController gunController;
+
+	private void Awake()
+	{
+		controller = GetComponent<PlayerController>();
+		gunController = GetComponent<GunController>();
+		viewCamera = Camera.main;
+		FindObjectOfType<Spawner>().OnNewWave += OnNewWave;
+	}
 
 	protected override void Start ()
 	{
 		base.Start ();
-		controller = GetComponent<PlayerController> ();
-		gunController = GetComponent<GunController> ();
+
+	}
+
+	void OnNewWave(int waveNumber)
+	{
+		health = startingHealth;
+		gunController.EquipGun(waveNumber - 1);
 	}
 
 	private void Update ()
@@ -38,9 +54,9 @@ public class Player : LivingEntity
 
 
 		//Look input.
-		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+		Ray ray = viewCamera.ScreenPointToRay (Input.mousePosition);
 		//new Plane(법선 벡터 : 수직 벡터값, 원점에서부터의 거리)
-		Plane groundPlane = new Plane (Vector3.up,Vector3.zero);
+		Plane groundPlane = new Plane (Vector3.up, Vector3.up * gunController.GunHeight);
 		float rayDistance;
 
 		if(groundPlane.Raycast(ray,out rayDistance))
@@ -50,13 +66,39 @@ public class Player : LivingEntity
 //			Debug.DrawLine (ray.origin, point, Color.red);
 
 			controller.LookAt (point);
-		}
+			corsshairs.transform.position = point;
+			corsshairs.DetectTagets(ray);
 
+			if ((new Vector2(point.x, point.z) - new Vector2(transform.position.x, transform.position.z)).magnitude > 1) {
+				gunController.Aim(point);
+			}
+		}
 
 		//Weapon input.
 		if(Input.GetMouseButton(0)) //좌클릭
 		{
-			gunController.Shoot ();
+			gunController.OnTriggerHold ();
 		}
+
+		if(Input.GetMouseButtonUp(0)) //좌클릭
+		{
+			gunController.OnTriggerRelease ();
+		}
+
+		if(Input.GetKeyDown(KeyCode.R)) //좌클릭
+		{
+			gunController.Reload ();
+		}
+
+		if (transform.position.y < -10)
+		{
+			TakeDamage(health);
+		}
+	}
+
+	public override void Die()
+	{
+		AudioManager.Instance.PlaySound("Player Death", transform.position);
+		base.Die();
 	}
 }

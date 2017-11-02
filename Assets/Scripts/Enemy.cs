@@ -14,6 +14,9 @@ public class Enemy : LivingEntity
 	};
 	State currentState;
 
+	public ParticleSystem deathEffect;
+	public static event System.Action OnDeathStatic;
+
 	NavMeshAgent pathfinder;
 	Transform target;
 	LivingEntity targetEntity;
@@ -32,28 +35,66 @@ public class Enemy : LivingEntity
 
 	bool hasTarget;
 
-	protected override void Start ()
+	void Awake()
 	{
-		base.Start ();
 		pathfinder = GetComponent<NavMeshAgent> ();
-		skinMaterial = GetComponent<Renderer> ().material;
-
-		originalColor = skinMaterial.color;
 
 		if (Player.Instance != null) 
 		{
-			currentState = State.Chasing;
 			hasTarget = true;
 
 			target = Player.Instance.transform;
 			targetEntity = target.GetComponent<LivingEntity> ();
-			targetEntity.OnDeath += OnTargetDeath;
 
 			myCollisionRadius = GetComponent<CapsuleCollider> ().radius;
 			targetCollisionRadius = target.GetComponent<CapsuleCollider> ().radius;
+		}
+	}
+
+	protected override void Start ()
+	{
+		base.Start ();
+
+		if (hasTarget) 
+		{
+			currentState = State.Chasing;
+
+			targetEntity.OnDeath += OnTargetDeath;
 
 			StartCoroutine (UpdatePath ());
 		}
+	}
+
+	public void SetCharacteristics(float moveSpeed, int hitsToKillPlayer, float enemyHealth, Color skinColor)
+	{
+		pathfinder.speed = moveSpeed;
+
+		if (hasTarget) {
+			damage = Mathf.Ceil(targetEntity.startingHealth / hitsToKillPlayer);
+		}
+		startingHealth = enemyHealth;
+
+		ParticleSystem.MainModule main = deathEffect.main;
+		main.startColor = new ParticleSystem.MinMaxGradient(new Color(skinColor.r, skinColor.g, skinColor.b, 1));
+
+		skinMaterial = GetComponent<Renderer> ().material;
+		skinMaterial.color = skinColor;
+		originalColor = skinMaterial.color;
+	}
+
+	public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
+	{
+		AudioManager.Instance.PlaySound("Impact", transform.position);
+		if (damage >= health) {
+
+			if (OnDeathStatic != null)
+				OnDeathStatic();
+
+			AudioManager.Instance.PlaySound("Enemy Death", transform.position);
+            Destroy(Instantiate(deathEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)) as GameObject, deathEffect.main.startLifetime.constant);
+		}
+
+		base.TakeHit(damage, hitPoint, hitDirection);
 	}
 
 	private void OnTargetDeath()
@@ -64,7 +105,7 @@ public class Enemy : LivingEntity
 
 	private void Update()
 	{
-		if (!hasTarget)
+		if (!hasTarget || target == null)
 			return;
 		
 		if (Time.time > nextAttackTime)
@@ -76,7 +117,7 @@ public class Enemy : LivingEntity
 			if (sqrDstToTarget < Mathf.Pow (attackDistanceThreshold + myCollisionRadius + targetCollisionRadius, 2))
 			{
 				nextAttackTime = Time.time + timeBetweenAttacks;
-
+				AudioManager.Instance.PlaySound("Enemy attack", transform.position);
 				StartCoroutine (Attack ());
 			}
 		}
@@ -129,7 +170,7 @@ public class Enemy : LivingEntity
 				Vector3 dirToTarget = (target.position - transform.position).normalized;
 				Vector3 targetPosition = target.position - dirToTarget * (myCollisionRadius + targetCollisionRadius + attackDistanceThreshold);
 
-				if (!isDead) {
+				if (!isDead && hasTarget) {
 					pathfinder.SetDestination (targetPosition);
 				}
 			}

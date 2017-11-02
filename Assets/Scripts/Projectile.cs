@@ -5,6 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
 	public LayerMask collisionMask;
+
 	float speed = 10;
 	float damage = 1;
 
@@ -18,7 +19,7 @@ public class Projectile : MonoBehaviour
 		Collider[] initialCollisions = Physics.OverlapSphere (transform.position, 0.1f,collisionMask);
 		if (initialCollisions.Length > 0)
 		{
-			OnHitObject (initialCollisions [0]);
+			OnHitObject (initialCollisions[0], transform.position);
 		}
 	}
 
@@ -43,24 +44,15 @@ public class Projectile : MonoBehaviour
 
 		if (Physics.Raycast (ray, out hit, moveDistance + skinWidth, collisionMask, QueryTriggerInteraction.Collide))//QueryTrigerInteraction.Collide = IsTrigger의 상태인 콜라이더도 체크함.
 		{
-			OnHitObject (hit);	
+			OnHitObject (hit.collider, hit.point);	
 		}
 	}
 
-	private void OnHitObject(RaycastHit hit)
-	{
-		IDamageable damageableObject = hit.collider.GetComponent<IDamageable> ();
-		if (damageableObject != null)
-			damageableObject.TakeHit (damage, hit);
-		
-		Destroy (gameObject);
-	}
-
-	void OnHitObject(Collider col)
+	void OnHitObject(Collider col, Vector3 hitPoint)
 	{
 		IDamageable damageableObject = col.GetComponent<IDamageable> ();
 		if (damageableObject != null)
-			damageableObject.TakeDamage (damage);
+			damageableObject.TakeHit (damage, hitPoint, transform.forward);
 
 		Destroy (gameObject);
 	}

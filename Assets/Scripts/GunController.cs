@@ -6,13 +6,11 @@ public class GunController : MonoBehaviour
 {
 	public Transform weaponHold;
 
-	public Gun startingGun;
+	public Gun[] allGuns;
 	private Gun equippedGun;
 
 	private void Start()
 	{
-		if (startingGun != null)
-			EquipGun (startingGun);
 	}
 
 	public void EquipGun(Gun gunToEquip)
@@ -24,11 +22,46 @@ public class GunController : MonoBehaviour
 		equippedGun.transform.parent = weaponHold;
 	}
 
-	public void Shoot()
+	public void EquipGun(int weaponIndex)
+	{
+		EquipGun(allGuns[weaponIndex]);	
+	}
+
+	public void OnTriggerHold()
 	{
 		if (equippedGun == null)
 			return;
 
-		equippedGun.Shoot ();
+		equippedGun.OnTriggerHold ();
+	}
+
+	public void OnTriggerRelease()
+	{
+		if (equippedGun == null)
+			return;
+
+		equippedGun.OnTriggerRelease();
+	}
+
+	public float GunHeight { 
+		get {
+			return weaponHold.position.y;
+		}
+	}
+
+	public void Aim(Vector3 aimPoint)
+	{
+		if (equippedGun == null)
+			return;
+
+		equippedGun.Aim(aimPoint);
+	}
+
+	public void Reload()
+	{
+		if (equippedGun == null)
+			return;
+
+		equippedGun.Reload();
 	}
 }
