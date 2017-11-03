@@ -18,6 +18,7 @@ public class GameUI : MonoBehaviour
 
 	Spawner spawner;
 	Player player;
+	Player_Net player_net;
 
 	private void Awake()
 	{
@@ -25,9 +26,15 @@ public class GameUI : MonoBehaviour
 		spawner.OnNewWave += OnNewWave;	
 	}
 
-	public void SetPlayer () {
-		player = Player.Instance;
+	public void SetPlayer (Player _player) {
+		player = _player;
 		player.OnDeath += OnGameOver;
+	}
+
+	public void SetPlayer_Net(Player_Net _player)
+	{
+		player_net = _player;
+		player_net.OnDeath += OnGameOver;
 	}
 
 	private void FixedUpdate()
@@ -35,8 +42,12 @@ public class GameUI : MonoBehaviour
 		scoreUI.text = ScoreKeeper.score.ToString("D7");
 
 		float healthPercent = 0;
+
 		if (player != null)
 			healthPercent = player.health / player.startingHealth;
+		else if(player_net != null)
+			healthPercent = player_net.health / player_net.startingHealth;
+		
 		healthBar.localScale = new Vector3(healthPercent, 1, 1);
 	}
 

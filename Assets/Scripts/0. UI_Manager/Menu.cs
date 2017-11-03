@@ -46,11 +46,11 @@ public class Menu : MonoBehaviour
 	{
 		serverMenuHolder.SetActive(true);
 
-		if (NetworkManager.Instance != null)
+		if (Mng_Network.Instance != null)
 		{
-			NetworkManager.Instance.OnFindOtherUser += OnFindOtherUser;
-			NetworkManager.Instance.OnNotFindOtherUser += OnNotFindOtherUser;
-			NetworkManager.Instance.RefreshHostList();
+			Mng_Network.Instance.OnFindOtherUser += OnFindOtherUser;
+			Mng_Network.Instance.OnNotFindOtherUser += OnNotFindOtherUser;
+			Mng_Network.Instance.RefreshHostList();
 		}
 			
 	}

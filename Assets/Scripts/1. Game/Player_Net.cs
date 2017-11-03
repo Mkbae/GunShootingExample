@@ -4,13 +4,13 @@ using UnityEngine;
 
 [RequireComponent(typeof(PlayerController))]
 [RequireComponent(typeof(GunController))]
-public class Player : LivingEntity
+public class Player_Net : LivingEntity
 {
-	private static Player _instance;
-	public static Player Instance{
+	private static Player_Net _instance;
+	public static Player_Net Instance{
 		get{
 			if(_instance == null)
-				_instance = FindObjectOfType(typeof(Player)) as Player;
+				_instance = FindObjectOfType(typeof(Player_Net)) as Player_Net;
 			return _instance;
 		}
 	}
@@ -38,9 +38,12 @@ public class Player : LivingEntity
 	{
 		base.Start ();
 
-		FindObjectOfType<GameUI>().SetPlayer(this);
-		FindObjectOfType<ScoreKeeper>().SetPlayer(this);
-		spawner.SetPlayer();
+		if (isLocalPlayer)
+		{
+			FindObjectOfType<GameUI>().SetPlayer_Net(this);
+			FindObjectOfType<ScoreKeeper>().SetPlayer_Net(this);
+			spawner.SetPlayer();
+		}
 	}
 
 	void OnNewWave(int waveNumber)
@@ -51,10 +54,8 @@ public class Player : LivingEntity
 
 	private void Update ()
 	{
-		if (spawner.networkMode)
-		{
-			//
-		}
+		if (!isLocalPlayer)
+			return;
 		//Movement.
 		//input값. 키보드 방향키. GetAxisRaw -> not smoothing (키입력 해제시 바로 동작 정지)
 		Vector3 moveInput = new Vector3 (Input.GetAxisRaw ("Horizontal"), 0, Input.GetAxisRaw ("Vertical"));
@@ -104,6 +105,13 @@ public class Player : LivingEntity
 		{
 			TakeDamage(health);
 		}
+	}
+
+	public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
+	{
+		AudioManager.Instance.PlaySound("Impact", transform.position);
+
+		base.TakeHit(damage, hitPoint, hitDirection);
 	}
 
 	public override void Die()

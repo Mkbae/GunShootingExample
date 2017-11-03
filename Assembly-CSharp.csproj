@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\0. UI_Manager\Utility.cs" />
      <Compile Include="Assets\Scripts\1. Game\Crosshairs.cs" />
      <Compile Include="Assets\Scripts\1. Game\Enemy.cs" />
+     <Compile Include="Assets\Scripts\1. Game\Enemy_Net.cs" />
      <Compile Include="Assets\Scripts\1. Game\Gun.cs" />
      <Compile Include="Assets\Scripts\1. Game\GunController.cs" />
      <Compile Include="Assets\Scripts\1. Game\IDamagable.cs" />
@@ -63,10 +64,11 @@
      <Compile Include="Assets\Scripts\1. Game\MuzzleFlash.cs" />
      <Compile Include="Assets\Scripts\1. Game\Player.cs" />
      <Compile Include="Assets\Scripts\1. Game\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\1. Game\Player_Net.cs" />
      <Compile Include="Assets\Scripts\1. Game\Projectile.cs" />
      <Compile Include="Assets\Scripts\1. Game\Shell.cs" />
      <Compile Include="Assets\Scripts\1. Game\Spawner.cs" />
-     <Compile Include="Assets\Scripts\2. Server\NetworkManager.cs" />
+     <Compile Include="Assets\Scripts\2. Server\Mng_Network.cs" />
      <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\NoiseEffectShaderRGB.shader" />

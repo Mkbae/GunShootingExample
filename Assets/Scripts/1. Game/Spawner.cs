@@ -7,10 +7,9 @@ public class Spawner : MonoBehaviour
 	public bool devMode;
 	public bool networkMode;
 
-	public GameObject NetworkPlayer;
-
 	public Wave[] waves;
 	public Enemy enemy;
+	public Enemy_Net enemy_net;
 
 	private LivingEntity playerEntitiy;
 	private Transform playerT;
@@ -35,26 +34,18 @@ public class Spawner : MonoBehaviour
 
 	public event System.Action<int> OnNewWave;
 
-	private void Start()
-	{
-		if (networkMode)
-		{
-			Network.Instantiate(NetworkPlayer,Vector3.zero + Vector3.up * 3, Quaternion.identity,0);
-			return;
-		}
-
-		SetPlayer();
-	}
-
 	public void SetPlayer()
 	{
-		playerEntitiy = FindObjectOfType<Player>();
+		if (networkMode)
+			playerEntitiy = FindObjectOfType<Player_Net>();
+		else
+			playerEntitiy = FindObjectOfType<Player>();
+
 		playerT = playerEntitiy.transform;
+		playerEntitiy.OnDeath += OnPlayerDeath;
 
 		nextCampCheckTime = timeBetweenCampingChecks + Time.time;
 		campPositionOld = playerT.position;
-
-		playerEntitiy.OnDeath += OnPlayerDeath;
 
 		map = FindObjectOfType<MapGenerator>();
         NextWave ();
@@ -123,14 +114,15 @@ public class Spawner : MonoBehaviour
 			yield return null;
 		}
 
-		Enemy spawnedEnemy = null;
 		if (networkMode)
-			spawnedEnemy = Network.Instantiate(enemy, randomTile.position + Vector3.up, Quaternion.identity,0) as Enemy;
-		else
-			spawnedEnemy = Instantiate(enemy, randomTile.position + Vector3.up, Quaternion.identity) as Enemy;
-
-		if (spawnedEnemy != null)
 		{
+			Enemy_Net spawnedEnemy = Instantiate(enemy_net, randomTile.position + Vector3.up, Quaternion.identity) as Enemy_Net;
+			spawnedEnemy.OnDeath += OnEnemyDeath;
+			spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, currentWave.enemyHealth, currentWave.skinColor);
+		}
+		else
+		{
+			Enemy spawnedEnemy = Instantiate(enemy, randomTile.position + Vector3.up, Quaternion.identity) as Enemy;
 			spawnedEnemy.OnDeath += OnEnemyDeath;
 			spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, currentWave.enemyHealth, currentWave.skinColor);
 		}

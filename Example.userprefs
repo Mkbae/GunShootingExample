@@ -1,15 +1,22 @@
 ﻿<Properties StartupConfiguration="{C025688C-DDB0-0B04-C7C1-4DAB448D811E}|단위 테스트">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/0. UI_Manager/ScoreKeeper.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/1. Game/Spawner.cs">
     <Files>
-      <File FileName="Assets/Scripts/2. Server/NetworkManager.cs" Line="81" Column="31" />
-      <File FileName="Assets/Scripts/0. UI_Manager/Menu.cs" Line="52" Column="37" />
+      <File FileName="Assets/Scripts/0. UI_Manager/Menu.cs" Line="53" Column="26" />
       <File FileName="Assets/Scripts/0. UI_Manager/AudioManager.cs" Line="46" Column="39" />
-      <File FileName="Assets/Scripts/1. Game/Enemy.cs" Line="45" Column="4" />
-      <File FileName="Assets/Scripts/1. Game/Spawner.cs" Line="67" Column="1" />
-      <File FileName="Assets/Scripts/1. Game/Player.cs" Line="43" Column="42" />
-      <File FileName="Assets/Scripts/0. UI_Manager/GameUI.cs" Line="28" Column="23" />
+      <File FileName="Assets/Scripts/1. Game/Enemy.cs" Line="98" Column="3" />
+      <File FileName="Assets/Scripts/1. Game/Spawner.cs" Line="38" Column="14" />
+      <File FileName="Assets/Scripts/1. Game/Player.cs" Line="43" Column="17" />
+      <File FileName="Assets/Scripts/0. UI_Manager/GameUI.cs" Line="48" Column="30" />
       <File FileName="Assets/Scripts/1. Game/PlayerController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/0. UI_Manager/ScoreKeeper.cs" Line="19" Column="21" />
+      <File FileName="Assets/Scripts/0. UI_Manager/ScoreKeeper.cs" Line="25" Column="3" />
+      <File FileName="../../../../../Downloads/NetworkManagerHUD.cs" Line="70" Column="28" />
+      <File FileName="Assets/Scripts/2. Server/Mng_Network.cs" Line="65" Column="21" />
+      <File FileName="Assets/Scripts/1. Game/Player_Net.cs" Line="30" Column="49" />
+      <File FileName="Assets/Scripts/1. Game/LivingEntity.cs" Line="20" Column="24" />
+      <File FileName="Assets/Scripts/1. Game/GunController.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/1. Game/Projectile.cs" Line="55" Column="24" />
+      <File FileName="Assets/Scripts/1. Game/IDamagable.cs" Line="5" Column="7" />
+      <File FileName="Assets/Scripts/1. Game/Enemy_Net.cs" Line="57" Column="26" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

@@ -16,9 +16,14 @@ public class ScoreKeeper : MonoBehaviour
 		Enemy.OnDeathStatic += OnEnemyKilled;
 	}
 
-	public void SetPlayer()
+	public void SetPlayer(Player _player)
 	{
-		Player.Instance.OnDeath += OnPlayerDeath;
+		_player.OnDeath += OnPlayerDeath;
+	}
+
+	public void SetPlayer_Net(Player_Net _player)
+	{
+		_player.OnDeath += OnPlayerDeath;
 	}
 
 	void OnEnemyKilled()

@@ -1,16 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class NetworkManager : MonoBehaviour
+public class Mng_Network : MonoBehaviour
 {
-	private static NetworkManager _instance;
-	public static NetworkManager Instance
+	private static Mng_Network _instance;
+	public static Mng_Network Instance
 	{
 		get
 		{
 			if (_instance == null)
-				_instance = FindObjectOfType(typeof(NetworkManager)) as NetworkManager;
+				_instance = FindObjectOfType(typeof(Mng_Network)) as Mng_Network;
 			return _instance;
 		}
 	}
@@ -18,25 +19,30 @@ public class NetworkManager : MonoBehaviour
 	public System.Action OnFindOtherUser;
 	public System.Action OnNotFindOtherUser;
 
-	private float waitUserTime = 15;
-
-
+	private const float waitUserTime = 15;
 	private const string typeName = "2345ajdfgnadfdafgih";
 	private const string gameName = "top down gun shooting";
 
 	private HostData[] hostList;
 
+	private NetworkManager manager;
+
 	private void Awake()
 	{
-		NetworkManager[] manager = FindObjectsOfType(typeof(NetworkManager)) as NetworkManager[];
-		if (manager.Length >= 2)
+		Mng_Network[] myself = FindObjectsOfType(typeof(Mng_Network)) as Mng_Network[];
+		if (myself.Length >= 2)
 		{
-			for (int i = 0; i<manager.Length; i++)
-				if (manager[i] == this)
-					Destroy(manager [i].gameObject);
+			for (int i = 0; i<myself.Length; i++)
+				if (myself[i] == this)
+					Destroy(myself [i].gameObject);
 		}
 
 		DontDestroyOnLoad(gameObject);
+	}
+
+	private void Start()
+	{
+		manager = GetComponent<NetworkManager>();
 	}
 
 

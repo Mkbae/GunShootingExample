@@ -74,6 +74,11 @@ public class AudioManager : MonoBehaviour
 		if (Player.Instance != null) {
 			audioListener.position = Player.Instance.transform.position;
 		}
+
+		if (Player_Net.Instance != null) {
+			if(Player_Net.Instance.isLocalPlayer)
+				audioListener.position = Player_Net.Instance.transform.position;
+		}
 	}
 
 	public void SetVolume(float volumePercent, AudioChannel channel)
