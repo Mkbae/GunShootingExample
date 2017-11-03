@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Spawner : MonoBehaviour
+public class Spawner : NetworkBehaviour
 {
 	public bool devMode;
 	public bool networkMode;
@@ -58,6 +59,9 @@ public class Spawner : MonoBehaviour
 			return;
 
 		if (!isSetPlayer)
+			return;
+
+		if (playerT == null)
 			return;
 
 		if (Time.time > nextCampCheckTime)
@@ -116,9 +120,7 @@ public class Spawner : MonoBehaviour
 
 		if (networkMode)
 		{
-			Enemy_Net spawnedEnemy = Instantiate(enemy_net, randomTile.position + Vector3.up, Quaternion.identity) as Enemy_Net;
-			spawnedEnemy.OnDeath += OnEnemyDeath;
-			spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, currentWave.enemyHealth, currentWave.skinColor);
+			CmdSpawn_Net(randomTile.position);
 		}
 		else
 		{
@@ -126,6 +128,16 @@ public class Spawner : MonoBehaviour
 			spawnedEnemy.OnDeath += OnEnemyDeath;
 			spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, currentWave.enemyHealth, currentWave.skinColor);
 		}
+	}
+
+	[Command]
+	void CmdSpawn_Net(Vector3 randomtilePos)
+	{
+		Enemy_Net spawnedEnemy = Instantiate(enemy_net, randomtilePos + Vector3.up, Quaternion.identity) as Enemy_Net;
+		spawnedEnemy.OnDeath += OnEnemyDeath;
+		spawnedEnemy.SetCharacteristics(currentWave.moveSpeed, currentWave.hitsToKillPlayer, currentWave.enemyHealth, currentWave.skinColor);
+
+		NetworkServer.Spawn(spawnedEnemy.gameObject);
 	}
 
 	private void OnPlayerDeath()

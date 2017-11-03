@@ -45,14 +45,6 @@ public class Menu : MonoBehaviour
 	public void MultiPlay()
 	{
 		serverMenuHolder.SetActive(true);
-
-		if (Mng_Network.Instance != null)
-		{
-			Mng_Network.Instance.OnFindOtherUser += OnFindOtherUser;
-			Mng_Network.Instance.OnNotFindOtherUser += OnNotFindOtherUser;
-			Mng_Network.Instance.RefreshHostList();
-		}
-			
 	}
 
 	void OnNotFindOtherUser()

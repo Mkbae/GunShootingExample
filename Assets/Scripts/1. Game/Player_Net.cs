@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerController))]
-[RequireComponent(typeof(GunController))]
+[RequireComponent(typeof(GunController_Net))]
 public class Player_Net : LivingEntity
 {
 	private static Player_Net _instance;
@@ -21,17 +21,18 @@ public class Player_Net : LivingEntity
 
 	private Camera viewCamera;
 	private PlayerController controller;
-	private GunController gunController;
+	private GunController_Net gunController;
 
 	Spawner spawner;
 
 	private void Awake()
 	{
 		controller = GetComponent<PlayerController>();
-		gunController = GetComponent<GunController>();
+		gunController = GetComponent<GunController_Net>();
 		viewCamera = Camera.main;
 		spawner = FindObjectOfType<Spawner>();
-		spawner.OnNewWave += OnNewWave;
+		if(spawner != null)
+			spawner.OnNewWave += OnNewWave;
 	}
 
 	protected override void Start ()
@@ -42,7 +43,12 @@ public class Player_Net : LivingEntity
 		{
 			FindObjectOfType<GameUI>().SetPlayer_Net(this);
 			FindObjectOfType<ScoreKeeper>().SetPlayer_Net(this);
-			spawner.SetPlayer();
+			if(spawner != null)
+				spawner.SetPlayer();
+		}
+		else
+		{
+			corsshairs.gameObject.SetActive(false);
 		}
 	}
 
@@ -87,7 +93,7 @@ public class Player_Net : LivingEntity
 
 		//Weapon input.
 		if(Input.GetMouseButton(0)) //좌클릭
-		{
+		{		
 			gunController.OnTriggerHold ();
 		}
 

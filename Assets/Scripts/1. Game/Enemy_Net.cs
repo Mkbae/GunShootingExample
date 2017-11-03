@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy_Net : LivingEntity
@@ -46,18 +47,27 @@ public class Enemy_Net : LivingEntity
 		base.Start ();
 
 		Player_Net[] players = FindObjectsOfType(typeof(Player_Net)) as Player_Net[];
+		float dis_temp = 1000;
+		int targetIndex = -1;
+
 		for (int i = 0; i < players.Length; i++)
 		{
-			if (players[i].isLocalPlayer)
+			float distance = Vector3.Distance(transform.position, players[i].transform.position);
+
+			if (dis_temp > distance)
 			{
-				hasTarget = true;
-
-				target = players[i].transform;
-				targetEntity = target.GetComponent<LivingEntity> ();
-				targetCollisionRadius = target.GetComponent<CapsuleCollider> ().radius;
-
-				break;
+				targetIndex = i;
+				dis_temp = distance;
 			}
+		}
+
+		if (targetIndex<players.Length && targetIndex >= 0)
+		{
+			hasTarget = true;
+
+			target = players[targetIndex].transform;
+			targetEntity = target.GetComponent<LivingEntity> ();
+			targetCollisionRadius = target.GetComponent<CapsuleCollider> ().radius;
 		}
 
 		if (hasTarget) 
@@ -96,10 +106,17 @@ public class Enemy_Net : LivingEntity
 				OnDeathStatic();
 
 			AudioManager.Instance.PlaySound("Enemy Death", transform.position);
-            Destroy(Instantiate(deathEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)) as GameObject, deathEffect.main.startLifetime.constant);
+			GameObject go = Instantiate(deathEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)) as GameObject;
+			CmdCreateEffect(go);
 		}
 
 		base.TakeHit(damage, hitPoint, hitDirection);
+	}
+
+	[Command]
+	void CmdCreateEffect(GameObject go)
+	{
+		NetworkServer.Spawn(go);
 	}
 
 	private void OnTargetDeath()
@@ -108,6 +125,7 @@ public class Enemy_Net : LivingEntity
 		currentState = State.Idle;
 	}
 
+	[ServerCallback]
 	private void Update()
 	{
 		if (!hasTarget || target == null)
@@ -169,7 +187,7 @@ public class Enemy_Net : LivingEntity
 	{
 		float refreshRate = .25f;
 
-		while (hasTarget)
+		while (hasTarget && target != null)
 		{
 			if (currentState == State.Chasing) {
 				Vector3 dirToTarget = (target.position - transform.position).normalized;
